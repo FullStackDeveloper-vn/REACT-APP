@@ -1,55 +1,46 @@
-/**
- * Copyright 2021 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-import React, { useEffect, useRef, ReactElement } from "react";
-import ReactDOM from "react-dom";
-import { Wrapper, Status } from "@googlemaps/react-wrapper";
-
-
-const render = (status: Status): ReactElement => {
-  if (status === Status.LOADING) return <h3>{status} ..</h3>;
-  if (status === Status.FAILURE) return <h3>{status} ...</h3>;
-  return null;
-};
-
-function MyMapComponent({
-  center,
-  zoom,
-}: {
-  center: google.maps.LatLngLiteral;
-  zoom: number;
-}) {
-  const ref = useRef();
-
-  useEffect(() => {
-    new window.google.maps.Map(ref.current, {
-      center,
-      zoom,
-    });
-  });
-
-  return <div ref={ref} id="map" />;
-}
+import { useState, useEffect } from "react";
 
 export default function App() {
-  const center = { lat: -34.397, lng: 150.644 };
-  const zoom = 4;
+  const [error, setError] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [items, setItems] = useState([]);
 
-  return (
-    <Wrapper apiKey="AIzaSyCWSTwbJI_GEgp-Fz-3m2opswgkaHU-89c" render={render}>
-      <MyMapComponent center={center} zoom={zoom} />
-    </Wrapper>
-  );
+  // Note: the empty deps array [] means
+  // this useEffect will run once
+  // similar to componentDidMount()
+  useEffect(() => {
+    fetch("https://wgg522pwivhvi5gqsn675gth3q0otdja.lambda-url.us-east-1.on.aws/637261")
+      .then(res => res.text())
+      .then(
+        (result) => {
+
+          setIsLoaded(true);
+          setItems(result.split(''));
+
+        },
+        // Note: it's important to handle errors here
+        // instead of a catch() block so that we don't swallow
+        // exceptions from actual bugs in components.
+        (error) => {
+          setIsLoaded(true);
+          setError(error);
+        }
+      )
+  }, [])
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  } else if (!isLoaded) {
+    return <div>Loading...</div>;
+  } else {
+    return (
+      <ul>
+        {items.map((item, index) => (
+          <li key={index}>
+            {item}
+          </li>
+        ))}
+      </ul>
+    );
+  }
 }
