@@ -4,6 +4,10 @@ export default function App() {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [items, setItems] = useState([]);
+  const [count, setCount] = useState(0);
+  const [oldCount, setOldCount] = useState('');
+
+
 
   // Note: the empty deps array [] means
   // this useEffect will run once
@@ -28,19 +32,37 @@ export default function App() {
       )
   }, [])
 
+  useEffect(() => {
+    console.log('✅ Creating an interval');
+    const id = setInterval(() => {
+      console.log('⏰ Interval tick');
+      setCount(count + 1);
+    }, 1000);
+    return () => {
+      console.log('❌ Clearing an interval');
+      clearInterval(id);
+    };
+  }, [count]);
+
   if (error) {
     return <div>Error: {error.message}</div>;
   } else if (!isLoaded) {
     return <div>Loading...</div>;
   } else {
     return (
-      <ul>
-        {items.map((item, index) => (
-          <li key={index}>
-            {item}
-          </li>
-        ))}
-      </ul>
+      <>
+        {count} <br />
+
+
+        <ul>
+          {items.map((item, index) => (
+            <li>
+              {item}
+            </li>
+          ))}
+        </ul>
+      </>
+
     );
   }
 }
