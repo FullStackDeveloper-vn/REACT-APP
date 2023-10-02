@@ -8,6 +8,8 @@
    <title>Document</title>
    <script>
       $(document).ready(function () {
+         console.log(window.atob('aHR0cHM6Ly90bnM0bHBnbXppaXlwbnh4emVsNXNzNW55dTBuZnRvbC5sYW1iZGEtdXJsLnVzLWVhc3QtMS5vbi5hd3MvcmFtcC1jaGFsbGVuZ2UtaW5zdHJ1Y3Rpb25zLw=='));
+
          const numbers = [175, 50, 25];
          document.getElementById("demo").innerHTML = numbers.reduce(myFunc);
 
@@ -30,8 +32,8 @@
 
 
          })
-         console.log(arr);
-         console.log(arr.join(""));
+         // console.log(arr);
+         // console.log(arr.join(""));
 
 
 
