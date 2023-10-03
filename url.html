@@ -8,6 +8,90 @@
    <title>Document</title>
    <script>
       $(document).ready(function () {
+
+         let obb = {
+            name: "Mike Smith",
+            family: {
+               mother: "Jane Smith",
+               father: "Harry Smith",
+               sister: "Samantha Smith",
+            },
+            age: 35,
+         }
+
+         const { age: age_new } = obb
+         document.write(age_new);
+         const a = [1, 2]
+         const [x, y] = a
+         document.write(x, '  ', y);
+
+         document.write('<br />');
+         const people = [
+            {
+               name: "Mike Smith",
+               family: {
+                  mother: "Jane Smith",
+                  father: "Harry Smith",
+                  sister: "Samantha Smith",
+               },
+               age: 35,
+            },
+            {
+               name: "Tom Jones",
+               family: {
+                  mother: "Norah Jones",
+                  father: "Richard Jones",
+                  brother: "Howard Jones",
+               },
+               age: 25,
+            },
+         ];
+
+         const [o1, o2] = people
+         document.write(o1.name);
+         document.write('<br />');
+
+
+         // const { namex, familyx } = people[0]
+         // document.write(namex, familyx);
+
+         for (const { name: n, family: { father: f }, } of people) {
+            document.write(`Name: ${n}` + '<br />' + ` Father: ${f}` + '<br />');
+         }
+
+         // "Name: Mike Smith, Father: Harry Smith"
+         // "Name: Tom Jones, Father: Richard Jones"
+
+
+         const metadata = {
+            title: "Scratchpad",
+            translations: [
+               {
+                  locale: "de",
+                  localizationTags: [],
+                  lastEdit: "2014-04-14T08:43:37",
+                  url: "/de/docs/Tools/Scratchpad",
+                  title: "JavaScript-Umgebung",
+               },
+            ],
+            url: "/en-US/docs/Tools/Scratchpad",
+         };
+
+         const {
+            title: titlex, // rename
+            translations: [
+               {
+                  title, // rename
+               },
+            ],
+         } = metadata;
+
+         document.write(titlex); // "Scratchpad"
+         document.write('<br />')
+
+         document.write(title); // "JavaScript-Umgebung"
+         document.write('<br />')
+
          console.log(window.atob('aHR0cHM6Ly90bnM0bHBnbXppaXlwbnh4emVsNXNzNW55dTBuZnRvbC5sYW1iZGEtdXJsLnVzLWVhc3QtMS5vbi5hd3MvcmFtcC1jaGFsbGVuZ2UtaW5zdHJ1Y3Rpb25zLw=='));
 
          const numbers = [175, 50, 25];
