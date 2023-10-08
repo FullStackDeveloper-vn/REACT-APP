@@ -1,53 +1,50 @@
-import { useContext, useState } from "react";
-import { places } from "./data";
-import { getImageUrl } from "./utils";
+import { createContext, useContext, useState } from "react";
 
-import { ImageSizeContext } from "./Context";
-
-
+const ThemeContext = createContext(null)
 
 export default function App() {
-  const [isLarge, setIsLarge] = useState(false)
-  const imageSize = isLarge ? 300 : 100
-
+  const [theme, setTheme] = useState('light')
   return (
-    <ImageSizeContext.Provider value={imageSize} >
+    <ThemeContext.Provider value={theme} >
+      <Form />
       <label>
-        <input type="checkbox" checked={isLarge} onChange={e => {
-          setIsLarge(e.target.checked)
+        <input type="checkbox" checked={theme === 'dark'} onChange={(e) => {
+          setTheme(e.target.checked ? 'dark' : 'light')
         }} />
-        Use large images
+        Use dark mode
       </label>
-      <hr />
-      <List imageSize={imageSize} />
-    </ImageSizeContext.Provider >
+    </ThemeContext.Provider>
   )
+
 };
 
-function List() {
-  const listItems = places.map(place => <li key={place.id} >
-    <Place place={place} />
-  </li>)
-  return <ul>{listItems} </ul>
-}
-
-function Place({ place, imageSize }) {
+function Form() {
   return (
-    <>
-      <PlaceImage place={place} />
-      <p>
-        <b>
-          {place.name}
-        </b>
-        {': ' + place.description}
-      </p>
-    </>
+    <Panel title="Welcome" >
+      <Button>SignUp</Button>
+      <Button>Login</Button>
+    </Panel>
   )
 }
 
-function PlaceImage({ place }) {
-  const imageSize = useContext(ImageSizeContext)
+function Panel({ title, children }) {
+  const theme = useContext(ThemeContext)
+  const classname = 'panel-' + theme
   return (
-    <img src={getImageUrl(place)} alt={place.name} width={imageSize} height={imageSize} />
+    <section className={classname} >
+      <h1> {title} </h1>
+      {children}
+    </section>
   )
 }
+
+function Button({ children }) {
+  const theme = useContext(ThemeContext)
+  const className = 'button-' + theme
+  return (
+    <button className={className} >
+      {children}
+    </button>
+  )
+  // do something
+};
