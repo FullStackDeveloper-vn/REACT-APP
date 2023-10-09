@@ -7,26 +7,33 @@ const CurrentUserContext = createContext(null)
 
 export default function App() {
   const [theme, setTheme] = useState('light')
-  const [currentUser, setCurrentUser] = useState(null)
+  // const [currentUser, setCurrentUser] = useState(null)
 
   return (
-    <ThemeContext.Provider value={theme}>
-      <CurrentUserContext.Provider value={{ currentUser, setCurrentUser }} >
+    <MyProviders theme={theme} setTheme={setTheme}>
+      <WelcomePanel />
+      <label>
+        <input type="checkbox" checked={theme === 'dark'}
+          onChange={(e) => {
+            setTheme(e.target.checked ? 'dark' : 'light')
+          }}
+        />
+        Use dark mode
+      </label>
+    </MyProviders>
+  )
+};
 
-        <WelcomePanel />
-        <label>
-          <input type="checkbox" checked={theme === 'dark'}
-            onChange={(e) => {
-              setTheme(e.target.checked ? 'dark' : 'light')
-            }}
-          />
-          Use dark mode
-        </label>
+function MyProviders({ children, theme, setTheme }) {
+  const [currentUser, setCurrentUser] = useState(null)
+  return (
+    <ThemeContext.Provider value={theme} >
+      <CurrentUserContext.Provider value={{ currentUser, setCurrentUser }} >
+        {children}
       </CurrentUserContext.Provider>
     </ThemeContext.Provider>
   )
-
-};
+}
 function WelcomePanel({ children }) {
   const { currentUser } = useContext(CurrentUserContext);
   return (
@@ -70,7 +77,7 @@ function LoginForm() {
   )
 }
 
-// function Form({ children }) {
+// function Form({children}) {
 //   return (
 //     <Panel title="Welcome" >
 //       <LoginButton />
