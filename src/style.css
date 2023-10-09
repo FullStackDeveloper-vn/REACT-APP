@@ -46,37 +46,21 @@ ul {
   padding-inline-start: 20px;
 }
 
-.panel-light,
-.panel-dark {
-  border: 1px solid black;
+label {
+  display: block;
+  clear: both;
+}
+
+.counter {
+  width: 100px;
+  text-align: center;
+  border: 1px solid gray;
   border-radius: 4px;
   padding: 20px;
-  margin-bottom: 10px;
-}
-.panel-light {
-  color: #222;
-  background: #fff;
+  margin: 0 20px 20px 0;
+  float: left;
 }
 
-.panel-dark {
-  color: #fff;
-  background: rgb(23, 32, 42);
-}
-
-.button-light,
-.button-dark {
-  border: 1px solid #777;
-  padding: 5px;
-  margin-right: 10px;
-  margin-top: 10px;
-}
-
-.button-dark {
-  background: #222;
-  color: #fff;
-}
-
-.button-light {
-  background: #fff;
-  color: #222;
+.hover {
+  background: #ffffd8;
 }

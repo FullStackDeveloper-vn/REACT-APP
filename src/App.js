@@ -1,60 +1,38 @@
-import { createContext, useContext, useState } from "react";
+import { useState, useEffect } from "react";
+import { FadeInAnimation } from "./animation";
+import { useRef } from "react";
 
-const ThemeContext = createContext(null)
-const CurrentUserContext = createContext(null)
+function Welcome() {
+  const ref = useRef(null)
 
-
+  useEffect(() => {
+    const animation = new FadeInAnimation(ref.current)
+    animation.start(1000)
+    return () => {
+      animation.stop()
+    }
+  }, [])
+  return (
+    <h1
+      ref={ref}
+      style={{
+        opacity: 0, color: 'white', fontSize: 50,
+        backgroundImage: 'radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%)'
+      }}
+    > Welcome </h1>
+  )
+}
 
 export default function App() {
-  // const [theme, setTheme] = useState('light')
-  // const [currentUser, setCurrentUser] = useState(null)
-
+  const [show, setShow] = useState(false)
   return (
-    <ThemeContext.Provider value='dark'>
-      <Form />
-    </ThemeContext.Provider>
+    <>
+      <button onClick={() => setShow(!show)} >
+        {show ? 'Remove' : 'Show'}
+      </button>
+      <hr />
+      {show && <Welcome />}
+    </>
   )
-};
 
-function Form() {
-  return (
-    <Panel title='Welcome'>
-      <Button>Sign up </Button>
-      <Button>Log in </Button>
-      <ThemeContext.Provider value='light'>
-        <Footer />
-      </ThemeContext.Provider>
-    </Panel>
-  )
-}
-
-function Footer() {
-  return (
-    <footer>
-      <Button>Settings</Button>
-    </footer>
-  )
-}
-
-
-function Panel({ title, children }) {
-  const theme = useContext(ThemeContext)
-  const className = 'panel-' + theme
-  return (
-    <section className={className} >
-      <h1> {title} </h1>
-      {children}
-    </section>
-  )
-}
-
-function Button({ children, onClick }) {
-  const theme = useContext(ThemeContext)
-  const className = 'button-' + theme
-  return (
-    <button className={className} onClick={onClick} >
-      {children}
-    </button>
-  )
-  // do something
 };
