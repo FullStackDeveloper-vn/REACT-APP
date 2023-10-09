@@ -6,98 +6,36 @@ const CurrentUserContext = createContext(null)
 
 
 export default function App() {
-  const [theme, setTheme] = useState('light')
+  // const [theme, setTheme] = useState('light')
   // const [currentUser, setCurrentUser] = useState(null)
 
   return (
-    <MyProviders theme={theme} setTheme={setTheme}>
-      <WelcomePanel />
-      <label>
-        <input type="checkbox" checked={theme === 'dark'}
-          onChange={(e) => {
-            setTheme(e.target.checked ? 'dark' : 'light')
-          }}
-        />
-        Use dark mode
-      </label>
-    </MyProviders>
+    <ThemeContext.Provider value='dark'>
+      <Form />
+    </ThemeContext.Provider>
   )
 };
 
-function MyProviders({ children, theme, setTheme }) {
-  const [currentUser, setCurrentUser] = useState(null)
+function Form() {
   return (
-    <ThemeContext.Provider value={theme} >
-      <CurrentUserContext.Provider value={{ currentUser, setCurrentUser }} >
-        {children}
-      </CurrentUserContext.Provider>
-    </ThemeContext.Provider>
-  )
-}
-function WelcomePanel({ children }) {
-  const { currentUser } = useContext(CurrentUserContext);
-  return (
-    <Panel title="Welcome">
-      {currentUser !== null ?
-        <Greeting /> :
-        <LoginForm />
-      }
+    <Panel title='Welcome'>
+      <Button>Sign up </Button>
+      <Button>Log in </Button>
+      <ThemeContext.Provider value='light'>
+        <Footer />
+      </ThemeContext.Provider>
     </Panel>
-  );
-}
-
-function Greeting() {
-  const { currentUser } = useContext(CurrentUserContext)
-  return (
-    <p>You logged in as {currentUser.name} </p>
   )
 }
 
-function LoginForm() {
-  const { setCurrentUser } = useContext(CurrentUserContext)
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const canLogin = firstName !== '' && lastName !== ''
+function Footer() {
   return (
-    <>
-      <label>
-        First name {':'}
-        <input required value={firstName}
-          onChange={e => setFirstName(e.target.value)}
-        />
-      </label>
-      <label>''
-        Last name {':'}
-        <input required value={lastName}
-          onChange={e => setLastName(e.target.value)}
-        />
-      </label>
-      <Button disabled={!canLogin} onClick={() => { setCurrentUser({ name: firstName + '' + lastName }) }} >Log in </Button>
-    </>
+    <footer>
+      <Button>Settings</Button>
+    </footer>
   )
 }
 
-// function Form({children}) {
-//   return (
-//     <Panel title="Welcome" >
-//       <LoginButton />
-//     </Panel>
-//   )
-// }
-
-function LoginButton() {
-  const { currentUser, setCurrentUser } = useContext(CurrentUserContext)
-  if (currentUser !== null) {
-    console.log(currentUser)
-    return <p>You logged in as {currentUser.name} </p>
-  }
-
-  return (
-    <Button onClick={() => {
-      setCurrentUser({ name: 'Hoang' })
-    }} > Login in Avika </Button>
-  )
-}
 
 function Panel({ title, children }) {
   const theme = useContext(ThemeContext)
