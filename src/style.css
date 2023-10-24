@@ -1,66 +1,99 @@
-* {
-  box-sizing: border-box;
-}
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
 
 body {
-  font-family: sans-serif;
-  margin: 20px;
-  padding: 0;
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.5rem;
+  background-color: #64748B;
+  color: #18181B;
+}
+
+input[type="text"], button {
+  font: inherit;
+}
+
+main {
+  margin: auto;
+  max-width: 600px;
+  background-color: #F8FAFC;
+  padding: 1rem 2rem;
+  border-radius: 15px;
+  box-shadow: 2px 2px 5px #333;
 }
 
 h1 {
-  margin-top: 0;
-  font-size: 22px;
+  margin: 0.5rem 0;
 }
 
-h2 {
-  margin-top: 0;
-  font-size: 20px;
+form, article {
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #F8FAFC;
+  border: 1px solid #18181B;
 }
 
-h3 {
-  margin-top: 0;
-  font-size: 18px;
+.todo {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }
 
-h4 {
-  margin-top: 0;
-  font-size: 16px;
+input[type="checkbox"] {
+  min-width: 30px;
+  min-height: 30px;
+  margin-right: 1rem;
 }
 
-h5 {
-  margin-top: 0;
-  font-size: 14px;
+button {
+  min-width: 50px;
+  min-height: 50px;
+  border: 1px solid #18181B;
+  border-radius: 10%;
+  cursor: pointer;
 }
 
-h6 {
-  margin-top: 0;
-  font-size: 12px;
+.trash {
+  background-color: #F8FAFC;
+  color: #EF4444;
 }
 
-code {
-  font-size: 1.2em;
+.trash:focus, .trash:hover {
+  filter:brightness(120%)
 }
 
-ul {
-  padding-inline-start: 20px;
+form {
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #18181B;
+  margin-bottom: 1rem;
 }
 
-label {
-  display: block;
-  clear: both;
+form label {
+  position: absolute;
+  left: -10000px;
 }
 
-.counter {
-  width: 100px;
-  text-align: center;
-  border: 1px solid gray;
-  border-radius: 4px;
-  padding: 20px;
-  margin: 0 20px 20px 0;
-  float: left;
+.new-todo {
+  width: 100%;
+  padding-right: 30px;
 }
 
-.hover {
-  background: #ffffd8;
+input[type="text"] {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 10px;
+  border: 0.5px solid #18181B;
+}
+
+.submit {
+  background-color: #F8FAFC;
+  color: gray;
+}
+
+.submit:focus, .submit:hover {
+  background-color: limegreen;
+  color: #F8FAFC;
 }
