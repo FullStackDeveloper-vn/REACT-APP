@@ -1,23 +1,25 @@
+import { useQuery } from "react-query";
 import useSWR from "swr"
 
-const fetcher = (...args) => fetch(...args)
-  .then((res) => res.json())
+const fetcher = () =>
+  fetch("https://jsonplaceholder.typicode.com/users")
+    .then((res) => res.json())
 
 export default function App() {
-  const { data, error } = useSWR(
-    'https://jsonplaceholder.typicode.com/users',
-    fetcher
-  )
+  const { isLoading, error, data } = useQuery(['contacts'], fetcher)
 
   if (error) return <p>An error occurred</p>;
-  if (!data) return <p>Loading</p>;
+  if (isLoading) return <p>Loading</p>;
   console.log(data)
+
   return (
     <ul>
       {data.map(item => (
         <li key={item.id}>
           {item.id} <br></br>
-          {item.name} <br></br> {item.email} <hr></hr>
+          {item.name} <br></br> {item.email} <br></br>
+          {item.company.catchPhrase}
+          <hr></hr>
         </li>
       ))}
     </ul>
