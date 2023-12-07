@@ -1,47 +1,138 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+import { useState } from 'react'
+import axios from 'axios'
 import {
+  useQuery,
+  useQueryClient,
   QueryClient,
   QueryClientProvider,
-  useQuery,
 } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import axios from 'axios'
 
 const queryClient = new QueryClient()
 
 export default function App() {
+  const [postId, setPostId] = useState(-1)
+
   return (
     <QueryClientProvider client={queryClient}>
-      <Example />
+      <p>
+        As you visit the posts below, you will notice them in a loading state
+        the first time you load them. However, after you return to this list and
+        click on any posts you have already visited again, you will see them
+        load instantly and background refresh right before your eyes!{' '}
+        <strong>
+          (You may need to throttle your network speed to simulate longer
+          loading sequences)
+        </strong>
+      </p>
+      {postId > -1 ? (
+        <Post postId={postId} setPostId={setPostId} />
+      ) : (
+        <Posts setPostId={setPostId} />
+      )}
+      <ReactQueryDevtools initialIsOpen />
     </QueryClientProvider>
   )
 }
 
-function Example() {
-  const { isPending, error, data, isFetching } = useQuery({
-    queryKey: ['repoData'],
-    queryFn: () =>
-      axios
-        .get('https://api.github.com/repos/tannerlinsley/react-query')
-        .then((res) => res.data),
+function usePosts() {
+  return useQuery({
+    queryKey: ['posts'],
+    queryFn: async () => {
+      const { data } = await axios.get(
+        'https://jsonplaceholder.typicode.com/posts',
+      )
+      return data
+    },
   })
+}
 
-  console.log(data)
-
-  if (isPending) return 'Loading...'
-
-  if (error) return 'An error has occurred: ' + error.message
+function Posts({ setPostId }) {
+  const queryClient = useQueryClient()
+  const { status, data, error, isFetching } = usePosts()
 
   return (
     <div>
-      <h1>{data.full_name}</h1>
-      <p>{data.downloads_url}</p>
-
-      <div>{isFetching ? 'Updating...' : ''}</div>
-      <ReactQueryDevtools initialIsOpen />
+      <h1>Posts</h1>
+      <div>
+        {status === 'pending' ? (
+          'Loading...'
+        ) : status === 'error' ? (
+          <span>Error: {error.message}</span>
+        ) : (
+          <>
+            <div>
+              {data.map((post) => (
+                <p key={post.id}>
+                  <a
+                    onClick={() => setPostId(post.id)}
+                    href="#"
+                    style={
+                      // We can access the query data here to show bold links for
+                      // ones that are cached
+                      queryClient.getQueryData(['post', post.id])
+                        ? {
+                          fontWeight: 'bold',
+                          color: 'green',
+                        }
+                        : {}
+                    }
+                  >
+                    {post.title}
+                  </a>
+                </p>
+              ))}
+            </div>
+            <div>{isFetching ? 'Background Updating...' : ' '}</div>
+          </>
+        )}
+      </div>
     </div>
   )
 }
 
+const getPostById = async (id) => {
+  const { data } = await axios.get(
+    `https://jsonplaceholder.typicode.com/posts/${id}`,
+  )
+  return data
+}
+
+function usePost(postId) {
+  return useQuery({
+    queryKey: ['post', postId],
+    queryFn: () => getPostById(postId),
+    enabled: !!postId,
+  })
+}
+
+function Post({ postId, setPostId }) {
+  const { status, data, error, isFetching } = usePost(postId)
+
+  return (
+    <div>
+      <div>
+        <a onClick={() => setPostId(-1)} href="#">
+          Back
+        </a>
+      </div>
+      {!postId || status === 'pending' ? (
+        'Loading...'
+      ) : status === 'error' ? (
+        <span>Error: {error.message}</span>
+      ) : (
+        <>
+          <h1>{data.title}</h1>
+          <div>
+            <p>{data.body}</p>
+          </div>
+          <div>{isFetching ? 'Background Updating...' : ' '}</div>
+          <p>This is Single Post</p>
+        </>
+      )}
+    </div>
+  )
+}
