@@ -1,29 +1,47 @@
-import { useQuery } from "react-query";
-import useSWR from "swr"
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import axios from 'axios'
 
-const fetcher = () =>
-  fetch("https://jsonplaceholder.typicode.com/users")
-    .then((res) => res.json())
+const queryClient = new QueryClient()
 
 export default function App() {
-  const { isLoading, error, data } = useQuery(['contacts'], fetcher)
-
-  if (error) return <p>An error occurred</p>;
-  if (isLoading) return <p>Loading</p>;
-  console.log(data)
-
   return (
-    <ul>
-      {data.map(item => (
-        <li key={item.id}>
-          {item.id} <br></br>
-          {item.name} <br></br> {item.email} <br></br>
-          {item.company.catchPhrase}
-          <hr></hr>
-        </li>
-      ))}
-    </ul>
+    <QueryClientProvider client={queryClient}>
+      <Example />
+    </QueryClientProvider>
   )
 }
 
-// Fix Something
+function Example() {
+  const { isPending, error, data, isFetching } = useQuery({
+    queryKey: ['repoData'],
+    queryFn: () =>
+      axios
+        .get('https://api.github.com/repos/tannerlinsley/react-query')
+        .then((res) => res.data),
+  })
+
+  console.log(data)
+
+  if (isPending) return 'Loading...'
+
+  if (error) return 'An error has occurred: ' + error.message
+
+  return (
+    <div>
+      <h1>{data.full_name}</h1>
+      <p>{data.downloads_url}</p>
+
+      <div>{isFetching ? 'Updating...' : ''}</div>
+      <ReactQueryDevtools initialIsOpen />
+    </div>
+  )
+}
+
