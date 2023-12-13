@@ -1,51 +1,138 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { useState } from 'react'
+import axios from 'axios'
+import {
+  useQuery,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+
+const queryClient = new QueryClient()
 
 export default function App() {
-  const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [page, setPage] = useState(1);
+  const [postId, setPostId] = useState(-1)
 
-  const fetchData = async () => {
-    // Simulate an API call to fetch more data
-    setIsLoading(true);
-    const response = await fetch(`https://jsonplaceholder.typicode.com/posts?_page=${page}&_limit=5`);
-    const newData = await response.json();
-    setData([...data, ...newData]);
-    // setIsLoading(false);
-  };
+  return (
+    <QueryClientProvider client={queryClient}>
+      <p>
+        As you visit the posts below, you will notice them in a loading state
+        the first time you load them. However, after you return to this list and
+        click on any posts you have already visited again, you will see them
+        load instantly and background refresh right before your eyes!{' '}
+        <strong>
+          (You may need to throttle your network speed to simulate longer
+          loading sequences)
+        </strong>
+      </p>
+      {postId > -1 ? (
+        <Post postId={postId} setPostId={setPostId} />
+      ) : (
+        <Posts setPostId={setPostId} />
+      )}
+      <ReactQueryDevtools initialIsOpen />
+    </QueryClientProvider>
+  )
+}
 
-  useEffect(() => {
-    fetchData();
-  }, [page]);
+function usePosts() {
+  return useQuery({
+    queryKey: ['posts'],
+    queryFn: async () => {
+      const { data } = await axios.get(
+        'https://jsonplaceholder.typicode.com/posts',
+      )
+      return data
+    },
+  })
+}
 
-  const handleScroll = () => {
-    // Check if the user has reached the bottom of the page
-    if (
-      window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight
-    ) {
-      setPage(page + 1);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [page]);
+function Posts({ setPostId }) {
+  const queryClient = useQueryClient()
+  const { status, data, error, isFetching } = usePosts()
 
   return (
     <div>
-      {data.map((item) => (
-        <div key={item.id}>
-          {item.id} <br></br>
-          {item.title}
-          <p>{item.body} </p>
-          <p>{item.body} </p>
-          <p>{item.body} </p>
-        </div>
-      ))}
-      {isLoading && <div>Loading...</div>}
+      <h1>Posts</h1>
+      <div>
+        {status === 'pending' ? (
+          'Loading...'
+        ) : status === 'error' ? (
+          <span>Error: {error.message}</span>
+        ) : (
+          <>
+            <div>
+              {data.map((post) => (
+                <p key={post.id}>
+                  <a
+                    onClick={() => setPostId(post.id)}
+                    href="#"
+                    style={
+                      // We can access the query data here to show bold links for
+                      // ones that are cached
+                      queryClient.getQueryData(['post', post.id])
+                        ? {
+                          fontWeight: 'bold',
+                          color: 'green',
+                        }
+                        : {}
+                    }
+                  >
+                    {post.title}
+                  </a>
+                </p>
+              ))}
+            </div>
+            <div>{isFetching ? 'Background Updating...' : ' '}</div>
+          </>
+        )}
+      </div>
     </div>
-  );
-};
+  )
+}
+
+const getPostById = async (id) => {
+  const { data } = await axios.get(
+    `https://jsonplaceholder.typicode.com/posts/${id}`,
+  )
+  return data
+}
+
+function usePost(postId) {
+  return useQuery({
+    queryKey: ['post', postId],
+    queryFn: () => getPostById(postId),
+    enabled: !!postId,
+  })
+}
+
+function Post({ postId, setPostId }) {
+  const { status, data, error, isFetching } = usePost(postId)
+
+  return (
+    <div>
+      <div>
+        <a onClick={() => setPostId(-1)} href="#">
+          Back
+        </a>
+      </div>
+      {!postId || status === 'pending' ? (
+        'Loading...'
+      ) : status === 'error' ? (
+        <span>Error: {error.message}</span>
+      ) : (
+        <>
+          <h1>{data.title}</h1>
+          <div>
+            <p>{data.body}</p>
+          </div>
+          <div>{isFetching ? 'Background Updating...' : ' '}</div>
+          <p>This is Single Post</p>
+        </>
+      )}
+    </div>
+  )
+}
