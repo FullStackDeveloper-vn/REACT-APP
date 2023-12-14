@@ -3,6 +3,10 @@ const fileUpload = require('express-fileupload');
 const path = require('path');
 
 const app = express();
+const cors = require('cors');
+
+app.use(cors());
+
 
 // Middleware for handling file uploads
 app.use(fileUpload());

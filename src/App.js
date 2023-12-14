@@ -1,41 +1,43 @@
 import React, { useState } from 'react';
 
-export default function App() {
-  const [selectedFile, setSelectedFile] = useState(null);
 
-  const handleFileInputChange = (event) => {
-    setSelectedFile(event.target.files[0]);
+export default function App() {
+  const [file, setFile] = useState(null);
+  const [success, setSuccess] = useState(false)
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
   };
 
-  let xxx = 'kkk';
-  const handleUpload = () => {
-    // Create a FormData object to store the file data
+  const handleUpload = async () => {
     const formData = new FormData();
-    formData.append('file', selectedFile);
-    // console.log(formData.getAll('file'));
+    formData.append('file', file);
 
-    // Send the file to the server using fetch or any other AJAX library
-    fetch('http://localhost:3001/upload', {
-      method: 'POST',
-      body: formData,
-    })
-      .then((response) => response)
-      .then((result) => {
-        // Handle the response from the server
-        console.log(result);
-        xxx = result
-      })
-      .catch((error) => {
-        // Handle any errors that occur during the upload process
-        console.error(error);
+    try {
+      const response = await fetch('http://localhost:3001/upload', {
+        method: 'POST',
+        body: formData,
       });
+
+      if (response.ok) {
+        console.log('File uploaded successfully');
+        setSuccess(true)
+        // Do something with the response
+      } else {
+        console.error('Error uploading file');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (
     <div>
-      <input type="file" onChange={handleFileInputChange} />
-      <button onClick={handleUpload}>Upload</button>
-      <p> Hoang {xxx} </p>
+      <input type="file" onChange={handleFileChange} />
+      <button onClick={handleUpload} disabled={!file}>
+        Upload
+      </button>
+      {success && <p className='success'> Successfull! </p>}
     </div>
   );
 };
