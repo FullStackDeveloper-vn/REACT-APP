@@ -1,99 +1,107 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
-
-body {
-  font-family: 'Nunito', sans-serif;
-  font-size: 1.5rem;
-  background-color: #64748B;
-  color: #18181B;
+.beauti {
+  /* Add your desired styles here */
+  background-color: lightblue;
+  color: white;
+  font-size: 24px;
+  padding: 10px;
 }
 
-input[type="text"], button {
-  font: inherit;
+div {
+  /* Set background color */
+  background-color: #f2f2f2;
+  
+  /* Add box shadow */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+  /* Add border radius */
+  border-radius: 6px;
+  
+  /* Add padding */
+  padding: 20px;
+  
+  /* Add margin */
+  margin: 10px;
+  
+  /* Add font color */
+  color: #333;
+  
+  /* Add font family and size */
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  
+  /* Add text alignment */
+  text-align: center;
+  
+  /* Add transition effect */
+  transition: all 0.3s ease;
 }
 
-main {
-  margin: auto;
-  max-width: 600px;
-  background-color: #F8FAFC;
-  padding: 1rem 2rem;
-  border-radius: 15px;
-  box-shadow: 2px 2px 5px #333;
+div:hover {
+  /* Add hover effect */
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-h1 {
-  margin: 0.5rem 0;
-}
-
-form, article {
-  padding: 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #F8FAFC;
-  border: 1px solid #18181B;
-}
-
-.todo {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-}
-
-input[type="checkbox"] {
-  min-width: 30px;
-  min-height: 30px;
-  margin-right: 1rem;
-}
-
-button {
-  min-width: 50px;
-  min-height: 50px;
-  border: 1px solid #18181B;
-  border-radius: 10%;
-  cursor: pointer;
-}
-
-.trash {
-  background-color: #F8FAFC;
-  color: #EF4444;
-}
-
-.trash:focus, .trash:hover {
-  filter:brightness(120%)
-}
-
-form {
-  padding: 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border: 1px solid #18181B;
-  margin-bottom: 1rem;
-}
-
-form label {
-  position: absolute;
-  left: -10000px;
-}
-
-.new-todo {
-  width: 100%;
-  padding-right: 30px;
-}
-
+/* Style for input element */
 input[type="text"] {
-  width: 100%;
-  padding: 0.5rem;
-  border-radius: 10px;
-  border: 0.5px solid #18181B;
+  background-color: #f8f8f8;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 16px;
+  color: #333;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.submit {
-  background-color: #F8FAFC;
-  color: gray;
+/* Style for submit button */
+input[type="submit"] {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.submit:focus, .submit:hover {
-  background-color: limegreen;
-  color: #F8FAFC;
+input[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+ul li {
+  background-color: #f2f2f2;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+ul li:hover {
+  background-color: #e0e0e0;
+}
+
+ul li:before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: #333;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+ul li:last-child {
+  margin-bottom: 0;
+}
+
+ul li:first-child {
+  margin-top: 0;
 }
