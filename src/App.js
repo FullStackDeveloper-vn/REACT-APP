@@ -9,10 +9,10 @@ export default function App() {
 
       <div class="sidebar">
         <ul>
-          <li><a href="#">Dashboard</a></li>
-          <li><a href="#">Users</a></li>
-          <li><a href="#">Settings</a></li>
-          <li><a href="#">Logout</a></li>
+          <li className='folder'><a href="#">Dashboard</a></li>
+          <li className='file'><a href="#">Users</a></li>
+          <li className='file'><a href="#">Settings</a></li>
+          <li className='folder'><a href="#">Logout</a></li>
         </ul>
       </div>
 
