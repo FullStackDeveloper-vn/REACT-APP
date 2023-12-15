@@ -1,43 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
+function App() {
+  const [content, setContent] = useState('');
 
-export default function App() {
-  const [file, setFile] = useState(null);
-  const [success, setSuccess] = useState(false)
+  useEffect(() => {
+    // Fetch initial content from API or database
+    // Example: fetchContent().then((data) => setContent(data));
+  }, []);
 
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+  const handleEditorChange = (event, editor) => {
+    const data = editor.getData();
+    setContent(data);
   };
 
-  const handleUpload = async () => {
-    const formData = new FormData();
-    formData.append('file', file);
-
-    try {
-      const response = await fetch('http://localhost:3001/upload', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (response.ok) {
-        console.log('File uploaded successfully');
-        setSuccess(true)
-        // Do something with the response
-      } else {
-        console.error('Error uploading file');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // Send updated content to API or database
+    // Example: saveContent(content);
   };
 
   return (
-    <div>
-      <input type="file" onChange={handleFileChange} />
-      <button onClick={handleUpload} disabled={!file}>
-        Upload
-      </button>
-      {success && <p className='success'> Successfull! </p>}
+    <div className="App">
+      <h1>CKEditor 5 with React</h1>
+      <form onSubmit={handleSubmit}>
+        <CKEditor
+          editor={ClassicEditor}
+          data={content}
+          onChange={handleEditorChange}
+        />
+        <button type="submit">Save</button>
+      </form>
     </div>
   );
-};
+}
+
+export default App;
