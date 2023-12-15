@@ -1,139 +1,52 @@
-.beauti {
-  /* Add your desired styles here */
-  background-color: lightblue;
-  color: white;
-  font-size: 24px;
+.header {
+  background-color: #686565;
+  color: #f8eaea;
   padding: 10px;
 }
 
-div {
-  /* Set background color */
-  background-color: #f2f2f2;
-  
-  /* Add box shadow */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  
-  /* Add border radius */
-  border-radius: 6px;
-  
-  /* Add padding */
-  padding: 20px;
-  
-  /* Add margin */
-  margin: 10px;
-  
-  /* Add font color */
-  color: #333;
-  
-  /* Add font family and size */
-  font-family: Arial, sans-serif;
-  font-size: 16px;
-  
-  /* Add text alignment */
-  text-align: center;
-  
-  /* Add transition effect */
-  transition: all 0.3s ease;
-}
-
-div:hover {
-  /* Add hover effect */
-  transform: scale(1.05);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* Style for input element */
-input[type="text"] {
-  background-color: #f8f8f8;
-  border: none;
-  border-radius: 5px;
+.sidebar {
+  width: 200px;
+  background-color: #f0f0f0;
   padding: 10px;
-  font-size: 16px;
-  color: #333;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  float: left;
+  height: 100vh;
 }
 
-/* Style for submit button */
-input[type="submit"] {
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-input[type="submit"]:hover {
-  background-color: #45a049;
-}
-
-ul {
-  list-style: none;
-  padding: 0;
-}
-
-ul li {
-  background-color: #f2f2f2;
-  border-radius: 8px;
+.content {
+  margin-left: 200px;
   padding: 10px;
-  margin-bottom: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  font-family: Arial, sans-serif;
-  color: #333;
 }
 
-ul li:hover {
-  background-color: #e0e0e0;
-}
-
-ul li:before {
-  content: "";
-  display: inline-block;
-  width: 10px;
-  height: 10px;
+.footer {
   background-color: #333;
-  border-radius: 50%;
-  margin-right: 10px;
-}
-
-ul li:last-child {
-  margin-bottom: 0;
-}
-
-ul li:first-child {
-  margin-top: 0;
-}
-
-.success {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #4CAF50;
-  color: white;
+  color: #fff;
   padding: 10px;
-  font-size: 18px;
+  clear: both;
 }
 
-.success::after {
-  content: "*";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 30px;
-  height: 30px;
-  background-size: cover;
-  animation: fly 3s infinite linear;
+table {
+  border-collapse: collapse;
+  width: 80%;
+  box-shadow: 0 4px 6px rgba(255, 245, 245, 0.1);
 }
 
-@keyframes fly {
-  0% {
-    transform: translate(-50%, -50%) rotate(0deg);
-  }
-  100% {
-    transform: translate(-50%, -50%) rotate(360deg);
-  }
+th, td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #252424;
 }
+
+th {
+  background-color: #e0e9e0;
+  color: rgb(26, 22, 22)
+}
+
+tr:hover {background-color: #f5f5f5;}
+
+ul { list-style-type: none; padding: 0; background-color: #f2f2f2; }
+
+ul li { margin: 5px; padding: 10px; background-color: #ffffff; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+ul li:hover { background-color: #f9f9f9; }
+
+ul li:last-child { margin-bottom: 0; }

@@ -1,39 +1,61 @@
 import React, { useState, useEffect } from 'react';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
-function App() {
-  const [content, setContent] = useState('');
-
-  useEffect(() => {
-    // Fetch initial content from API or database
-    // Example: fetchContent().then((data) => setContent(data));
-  }, []);
-
-  const handleEditorChange = (event, editor) => {
-    const data = editor.getData();
-    setContent(data);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // Send updated content to API or database
-    // Example: saveContent(content);
-  };
-
+export default function App() {
   return (
-    <div className="App">
-      <h1>CKEditor 5 with React</h1>
-      <form onSubmit={handleSubmit}>
-        <CKEditor
-          editor={ClassicEditor}
-          data={content}
-          onChange={handleEditorChange}
-        />
-        <button type="submit">Save</button>
-      </form>
-    </div>
-  );
-}
+    <>
+      <div class="header">
+        <h1>Admin Panel</h1>
+      </div>
 
-export default App;
+      <div class="sidebar">
+        <ul>
+          <li><a href="#">Dashboard</a></li>
+          <li><a href="#">Users</a></li>
+          <li><a href="#">Settings</a></li>
+          <li><a href="#">Logout</a></li>
+        </ul>
+      </div>
+
+      <div class="content">
+        <h2>Welcome to the Admin Panel</h2>
+        <p>This is the main content area of the admin panel.</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Country</th>
+              <th>Age</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>John Doe</td>
+              <td>USA</td>
+              <td>25</td>
+            </tr>
+            <tr>
+              <td>Jane Doe</td>
+              <td>USA</td>
+              <td>30</td>
+            </tr>
+            <tr>
+              <td>John Smith</td>
+              <td>UK</td>
+              <td>35</td>
+            </tr>
+            <tr>
+              <td>Jane Smith</td>
+              <td>UK</td>
+              <td>40</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+
+      <div class="footer">
+        <p>Admin Panel &copy; 2021</p>
+      </div>
+    </>
+  )
+}
