@@ -162,3 +162,8 @@ ul li.file:before {
   padding-left: 20px;
   margin-left: 15px;
 }
+
+canvas {
+  width: 80% !important;
+  height: 400px !important;
+}
