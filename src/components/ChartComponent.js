@@ -28,8 +28,8 @@ export default function ChartComponent() {
     return (
         <Chart
             chartType="BubbleChart"
-            width="90%"
-            height="400px"
+            width="100%"
+            height="300px"
             data={data}
             options={options}
         />
