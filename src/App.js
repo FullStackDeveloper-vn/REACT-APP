@@ -19,9 +19,7 @@ export default function App() {
 
       <div class="content">
         <h2>Welcome to the Admin Panel</h2>
-        <div>
-          <ChartComponent />
-        </div>
+
         <p>This is the main content area of the admin panel.</p>
         <table>
           <thead>
@@ -54,10 +52,6 @@ export default function App() {
             </tr>
           </tbody>
         </table>
-        <div>
-          <ChartComponent />
-        </div>
-
         <div>
           <ChartComponent />
         </div>
