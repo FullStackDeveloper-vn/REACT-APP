@@ -1,11 +1,5 @@
-
-.bg {
-  background-color: black;
-}
-.snowflake {
-  content: '*';
-  position: absolute;
-  background-color: #dfadad;
+.bubble {
+  position: fixed;
+  background: linear-gradient(95deg, #f8f9fa, #0481ff);
   border-radius: 50%;
-  opacity: 0.8;
 }
