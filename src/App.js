@@ -1,85 +1,75 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
-const App = () => {
-  const [bubbles, setBubbles] = useState([]);
+export default function App() {
+  const [tasks, setTasks] = useState([]);
+  const [newTask, setNewTask] = useState('');
 
-  // Function to generate random number between min and max
-  const getRandomNumber = (min, max) => {
-    return Math.random() * (max - min) + min;
-  };
-
-  // Function to generate a new bubble
-  const createBubble = () => {
-    const bubble = {
-      id: Date.now(),
-      x: getRandomNumber(0, window.innerWidth), // random X position within the window width
-      y: -50, // starting Y position above the screen
-      size: getRandomNumber(50, 90), // random bubble size
-      speed: 0.5 // random falling speed
-    };
-
-    setBubbles((prevState) => [...prevState, bubble]);
-  };
-
-  // Function to update bubble position on each animation frame
-  const updateBubblePosition = () => {
-    setBubbles((prevState) => {
-      return prevState.map((bubble) => ({
-        ...bubble,
-        y: bubble.y + bubble.speed // update Y position by adding the falling speed
-      }));
-    });
-  };
-
-  // Function to remove bubbles that go below the screen
-  const removeBubbles = () => {
-    setBubbles((prevState) => {
-      return prevState.filter((bubble) => bubble.y <= window.innerHeight);
-    });
-  };
-
-  // Effect hook to create bubbles on component mount
   useEffect(() => {
-    const interval = setInterval(createBubble, 500); // create a new bubble every 0.5 seconds
-
-    // Clean up function to remove interval on component unmount
-    return () => {
-      clearInterval(interval);
-    };
+    fetch('http://localhost:3001/tasks')
+      .then(response => response.json())
+      .then(data => console.log(data))
+      .catch(error => console.error('Error retrieving tasks: ', error));
   }, []);
 
-  // Effect hook to update bubble positions and remove bubbles
-  useEffect(() => {
-    const animationFrame = requestAnimationFrame(updateBubblePosition);
+  const handleAddTask = () => {
+    if (newTask.trim() === '') return;
+    fetch('http://localhost:3001/tasks', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ description: newTask })
+    })
+      .then(response => response.json())
+      .then(data => {
+        setTasks([...tasks, data]);
+        setNewTask('');
+      })
+      .catch(error => console.error('Error adding task: ', error));
+  };
 
-    // Clean up function to cancel animation frame on component unmount
-    return () => {
-      cancelAnimationFrame(animationFrame);
-    };
-  });
+  const handleUpdateTask = (id, description) => {
+    const updatedTasks = tasks.map(task => {
+      if (task.id === id) {
+        return { ...task, description };
+      }
+      return task;
+    });
+    setTasks(updatedTasks);
+    fetch(`/api/tasks/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ description })
+    })
+      .catch(error => console.error('Error updating task: ', error));
+  };
 
-  // Effect hook to remove bubbles that go below the screen
-  useEffect(() => {
-    removeBubbles();
-  }, [bubbles]);
+  const handleDeleteTask = (id) => {
+    const updatedTasks = tasks.filter(task => task.id !== id);
+    setTasks(updatedTasks);
+    fetch(`/api/tasks/${id}`, { method: 'DELETE' })
+      .catch(error => console.error('Error deleting task: ', error));
+  };
 
   return (
-    <div className="bubble-container">
-      {bubbles.map((bubble) => (
-        <div
-          key={bubble.id}
-          className="bubble"
-          style={{
-            left: bubble.x,
-            top: bubble.y,
-            width: bubble.size,
-            height: bubble.size
-          }}
-        />
-      ))}
-      <div className="screen" />
+    <div>
+      <h1>Tasks</h1>
+      <ul>
+        {tasks.map(task => (
+          <li key={task.id}>
+            <input
+              type="text"
+              value={task.description}
+              onChange={e => handleUpdateTask(task.id, e.target.value)}
+            />
+            <button onClick={() => handleDeleteTask(task.id)}>Delete</button>
+          </li>
+        ))}
+      </ul>
+      <input
+        type="text"
+        value={newTask}
+        onChange={e => setNewTask(e.target.value)}
+      />
+      <button onClick={handleAddTask}>Add Task</button>
     </div>
   );
 };
-
-export default App;
