@@ -7,6 +7,10 @@ const app = express();
 app.use(express.json());
 app.use(bodyParser.json());
 
+const cors = require('cors');
+
+app.use(cors());
+
 
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -49,33 +53,24 @@ app.get('/tasks', (req, res) => {
     });
 });
 
+
+// Add a new task
 app.post('/tasks', (req, res) => {
     const { description } = req.body;
-
-    // Insert a new task into the database
-    db.query('INSERT INTO tasks ( description) VALUES (?, ?)', [description], (err, result) => {
-        if (err) throw err;
-        res.json({ id: result.insertId });
+    console.log(req.body);
+    if (!description) {
+        res.status(400).json({ error: 'Description is required' });
+        return;
+    }
+    connection.query('INSERT INTO tasks (description) VALUES (?)', [description], (err, result) => {
+        if (err) {
+            console.error('Error creating task: ', err);
+            res.status(500).json({ error: 'Error creating task' });
+            return;
+        }
+        res.json({ id: result.insertId, description });
     });
 });
-
-// // Add a new task
-// app.post('/api/tasks', (req, res) => {
-//     const { description } = req.body;
-//     console.log(req.body);
-//     if (!description) {
-//         res.status(400).json({ error: 'Description is required' });
-//         return;
-//     }
-//     connection.query('INSERT INTO tasks (description) VALUES (?)', [description], (err, result) => {
-//         if (err) {
-//             console.error('Error creating task: ', err);
-//             res.status(500).json({ error: 'Error creating task' });
-//             return;
-//         }
-//         res.json({ id: result.insertId, description });
-//     });
-// });
 
 // Update a task
 app.put('/api/tasks/:id', (req, res) => {
@@ -96,7 +91,7 @@ app.put('/api/tasks/:id', (req, res) => {
 });
 
 // Delete a task
-app.delete('/api/tasks/:id', (req, res) => {
+app.delete('/tasks/:id', (req, res) => {
     const id = req.params.id;
     connection.query('DELETE FROM tasks WHERE id = ?', [id], (err) => {
         if (err) {

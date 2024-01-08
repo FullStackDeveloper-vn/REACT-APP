@@ -7,7 +7,7 @@ export default function App() {
   useEffect(() => {
     fetch('http://localhost:3001/tasks')
       .then(response => response.json())
-      .then(data => console.log(data))
+      .then(data => setTasks(data))
       .catch(error => console.error('Error retrieving tasks: ', error));
   }, []);
 
@@ -34,7 +34,7 @@ export default function App() {
       return task;
     });
     setTasks(updatedTasks);
-    fetch(`/api/tasks/${id}`, {
+    fetch(`http://localhost:3001/tasks/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ description })
@@ -45,7 +45,7 @@ export default function App() {
   const handleDeleteTask = (id) => {
     const updatedTasks = tasks.filter(task => task.id !== id);
     setTasks(updatedTasks);
-    fetch(`/api/tasks/${id}`, { method: 'DELETE' })
+    fetch(`http://localhost:3001/tasks/${id}`, { method: 'DELETE' })
       .catch(error => console.error('Error deleting task: ', error));
   };
 
@@ -56,6 +56,7 @@ export default function App() {
         {tasks.map(task => (
           <li key={task.id}>
             <input
+              disabled='true'
               type="text"
               value={task.description}
               onChange={e => handleUpdateTask(task.id, e.target.value)}
